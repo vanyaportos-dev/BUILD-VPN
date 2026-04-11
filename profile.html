@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.10/dist/dotlottie-wc.js" type="module"></script>
 </head>
 <body>
 
@@ -26,14 +25,9 @@
     <h1><span class="grad">Профиль</span> BUILD VPN</h1>
     <p>Скоро здесь появится ваш личный кабинет</p>
 
-    <dotlottie-wc
-      src="https://lottie.host/85d28193-ce8a-4951-b427-a9cdb4d7aef6/RjxoMEu4fY.json"
-      style="width:250px;height:250px;margin:20px auto;display:block;"
-      autoplay
-      loop>
-    </dotlottie-wc>
+    <div id="lottie-container" style="width:250px;height:250px;margin:20px auto;"></div>
 
-    <p class="build-label"><i class="fa-solid fa-hammer"></i> BUILD VPN работает над Вашим профилем</p>
+    <p class="build-label"><i class="fa-solid fa-helmet-safety"></i> Строим ваш профиль...</p>
 
     <a href="https://t.me/buildvpn_io" target="_blank" class="btn btn-primary" style="justify-content:center;width:100%">
       <i class="fa-brands fa-telegram"></i> Перейти в Telegram-канал
@@ -63,7 +57,7 @@
     <i class="fa-solid fa-gauge-high"></i>
     <span>Speedtest</span>
   </button>
-  <a href="/profile" class="nav-item" id="nav-profile">
+  <a href="/profile" class="nav-item active" id="nav-profile">
     <i class="fa-solid fa-user"></i>
     <span>Профиль</span>
   </a>
@@ -80,15 +74,24 @@
     </div>
     <div class="speed-result">
       <i class="fa-solid fa-satellite-dish speed-icon ping"></i>
-      <div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div>
+      <div>
+        <div class="speed-label">Пинг</div>
+        <div class="speed-value" id="res-ping">—</div>
+      </div>
     </div>
     <div class="speed-result">
       <i class="fa-solid fa-arrow-down speed-icon dl"></i>
-      <div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div>
+      <div>
+        <div class="speed-label">Загрузка</div>
+        <div class="speed-value" id="res-dl">—</div>
+      </div>
     </div>
     <div class="speed-result">
       <i class="fa-solid fa-arrow-up speed-icon ul"></i>
-      <div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div>
+      <div>
+        <div class="speed-label">Отдача</div>
+        <div class="speed-value" id="res-ul">—</div>
+      </div>
     </div>
     <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px">
       <i class="fa-solid fa-rotate"></i> Запустить снова
@@ -97,6 +100,17 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <script src="script.js"></script>
+<script>
+  // Lottie анимация — строительный кран
+  lottie.loadAnimation({
+    container: document.getElementById('lottie-container'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'https://assets2.lottiefiles.com/packages/lf20_ydoxtzde.json'
+  });
+</script>
 </body>
 </html>
