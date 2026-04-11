@@ -10,10 +10,114 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .crane-animation {
+      width: 250px;
+      height: 250px;
+      margin: 20px auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .crane {
+      font-size: 80px;
+      color: var(--accent-purple);
+      animation: craneMove 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+    }
+    
+    .crane-arm {
+      width: 120px;
+      height: 6px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+      border-radius: 3px;
+      margin: -10px auto 0;
+      animation: armSwing 4s ease-in-out infinite;
+      transform-origin: left center;
+    }
+    
+    .crane-hook {
+      width: 4px;
+      height: 40px;
+      background: var(--accent-glow);
+      margin-left: 100px;
+      animation: hookBounce 2s ease-in-out infinite;
+      position: relative;
+    }
+    
+    .crane-hook::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: -6px;
+      width: 16px;
+      height: 8px;
+      border: 3px solid var(--accent-glow);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+    }
+    
+    .crane-load {
+      width: 20px;
+      height: 20px;
+      background: var(--accent-pink);
+      border-radius: 4px;
+      margin-left: 92px;
+      margin-top: -5px;
+      animation: loadFloat 2s ease-in-out infinite 0.3s;
+      opacity: 0.8;
+    }
+    
+    .dust {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .dust span {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-purple);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: dustFloat 2.5s ease-in-out infinite;
+    }
+    
+    .dust span:nth-child(2) { animation-delay: 0.4s; width: 8px; height: 8px; }
+    .dust span:nth-child(3) { animation-delay: 0.8s; width: 5px; height: 5px; }
+    .dust span:nth-child(4) { animation-delay: 1.2s; }
+    
+    @keyframes craneMove {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes armSwing {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(8deg); }
+    }
+    
+    @keyframes hookBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(15px); }
+    }
+    
+    @keyframes loadFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(15px) rotate(5deg); }
+    }
+    
+    @keyframes dustFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+      50% { transform: translateY(-20px) scale(1.5); opacity: 0.6; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Blobs -->
 <div class="blobs">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -25,9 +129,19 @@
     <h1><span class="grad">Профиль</span> BUILD VPN</h1>
     <p>Скоро здесь появится ваш личный кабинет</p>
 
-    <div id="lottie-container" style="width:250px;height:250px;margin:20px auto;"></div>
+    <div class="crane-animation">
+      <div class="crane">
+        <i class="fa-solid fa-helmet-safety"></i>
+      </div>
+      <div class="crane-arm"></div>
+      <div class="crane-hook"></div>
+      <div class="crane-load"></div>
+      <div class="dust">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
 
-    <p class="build-label"><i class="fa-solid fa-helmet-safety"></i> Строим ваш профиль...</p>
+    <p class="build-label"><i class="fa-solid fa-hammer"></i> BUILD VPN строит Ваш профиль</p>
 
     <a href="https://t.me/buildvpn_io" target="_blank" class="btn btn-primary" style="justify-content:center;width:100%">
       <i class="fa-brands fa-telegram"></i> Перейти в Telegram-канал
@@ -35,82 +149,29 @@
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <a href="/servers" class="nav-item" id="nav-servers">
-    <i class="fa-solid fa-server"></i>
-    <span>Серверы</span>
-  </a>
-  <a href="/news" class="nav-item" id="nav-news">
-    <i class="fa-solid fa-newspaper"></i>
-    <span>Новости</span>
-  </a>
-  <a href="/#faq" class="nav-item">
-    <i class="fa-solid fa-circle-question"></i>
-    <span>FAQ</span>
-  </a>
-  <a href="/#pricing" class="nav-item">
-    <i class="fa-solid fa-tag"></i>
-    <span>Тарифы</span>
-  </a>
-  <button class="nav-item" id="nav-speed">
-    <i class="fa-solid fa-gauge-high"></i>
-    <span>Speedtest</span>
-  </button>
-  <a href="/profile" class="nav-item active" id="nav-profile">
-    <i class="fa-solid fa-user"></i>
-    <span>Профиль</span>
-  </a>
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/#pricing" class="nav-item"><i class="fa-solid fa-tag"></i><span>Тарифы</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/profile" class="nav-item active" id="nav-profile"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
 </nav>
 
-<!-- SPEED MODAL -->
 <div class="modal-backdrop" id="speed-modal">
   <div class="modal">
     <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
     <h2><span class="grad">Тест скорости</span></h2>
     <p class="sub">Проверка качества подключения через BUILD VPN</p>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="speed-bar"></div>
-    </div>
-    <div class="speed-result">
-      <i class="fa-solid fa-satellite-dish speed-icon ping"></i>
-      <div>
-        <div class="speed-label">Пинг</div>
-        <div class="speed-value" id="res-ping">—</div>
-      </div>
-    </div>
-    <div class="speed-result">
-      <i class="fa-solid fa-arrow-down speed-icon dl"></i>
-      <div>
-        <div class="speed-label">Загрузка</div>
-        <div class="speed-value" id="res-dl">—</div>
-      </div>
-    </div>
-    <div class="speed-result">
-      <i class="fa-solid fa-arrow-up speed-icon ul"></i>
-      <div>
-        <div class="speed-label">Отдача</div>
-        <div class="speed-value" id="res-ul">—</div>
-      </div>
-    </div>
-    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px">
-      <i class="fa-solid fa-rotate"></i> Запустить снова
-    </button>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
     <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <script src="script.js"></script>
-<script>
-  // Lottie анимация — строительный кран
-  lottie.loadAnimation({
-    container: document.getElementById('lottie-container'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: 'https://assets2.lottiefiles.com/packages/lf20_ydoxtzde.json'
-  });
-</script>
 </body>
 </html>
