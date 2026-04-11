@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Серверы — BUILD VPN</title>
+  <meta name="description" content="Статус серверов BUILD VPN. 31 сервер в 15 странах.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Blobs -->
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <!-- Header -->
+  <div class="page-header">
+    <h1><span class="grad">Статус</span> серверов</h1>
+    <p>Мониторинг 31 сервера в реальном времени</p>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><span class="dot dot-green"></span> Онлайн</div>
+    <div class="legend-item"><span class="dot dot-yellow"></span> Нагрузка</div>
+    <div class="legend-item"><span class="dot dot-red"></span> Недоступен</div>
+  </div>
+
+  <!-- Refresh -->
+  <div class="refresh-wrap">
+    <button class="btn btn-outline" id="refresh-btn">
+      <i class="fa-solid fa-rotate"></i> Обновить статусы
+    </button>
+  </div>
+
+  <!-- Grid -->
+  <div class="container">
+    <div class="servers-grid" id="servers-grid"></div>
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers">
+    <i class="fa-solid fa-server"></i>
+    <span>Серверы</span>
+  </a>
+  <a href="/news" class="nav-item" id="nav-news">
+    <i class="fa-solid fa-newspaper"></i>
+    <span>Новости</span>
+  </a>
+  <a href="/#faq" class="nav-item">
+    <i class="fa-solid fa-circle-question"></i>
+    <span>FAQ</span>
+  </a>
+  <a href="/#pricing" class="nav-item">
+    <i class="fa-solid fa-tag"></i>
+    <span>Тарифы</span>
+  </a>
+  <button class="nav-item" id="nav-speed">
+    <i class="fa-solid fa-gauge-high"></i>
+    <span>Speedtest</span>
+  </button>
+  <a href="/profile" class="nav-item" id="nav-profile">
+    <i class="fa-solid fa-user"></i>
+    <span>Профиль</span>
+  </a>
+</nav>
+
+<!-- SPEED MODAL -->
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="speed-bar"></div>
+    </div>
+    <div class="speed-result">
+      <i class="fa-solid fa-satellite-dish speed-icon ping"></i>
+      <div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div>
+    </div>
+    <div class="speed-result">
+      <i class="fa-solid fa-arrow-down speed-icon dl"></i>
+      <div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div>
+    </div>
+    <div class="speed-result">
+      <i class="fa-solid fa-arrow-up speed-icon ul"></i>
+      <div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div>
+    </div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px">
+      <i class="fa-solid fa-rotate"></i> Запустить снова
+    </button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
