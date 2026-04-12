@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WireGuard vs OpenVPN — BUILD VPN</title>
+  <meta name="description" content="Сравнение WireGuard и OpenVPN: скорость, безопасность, простота настройки. Какой протокол выбрать в 2025?">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .compare-table { width:100%; border-collapse:collapse; margin:20px 0; }
+    .compare-table th, .compare-table td { padding:14px 16px; text-align:left; border-bottom:1px solid rgba(168,85,247,0.15); font-size:14px; }
+    .compare-table th { color:var(--text-main); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; background:rgba(168,85,247,0.08); }
+    .compare-table td:first-child { color:var(--text-main); font-weight:600; }
+    .compare-table tr:last-child td { border-bottom:none; }
+    .win { color:#4ADE80; font-weight:700; }
+    .neutral { color:#EAB308; }
+  </style>
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <div class="container" style="max-width:780px">
+    <div style="padding-top:60px;margin-bottom:40px">
+      <a href="/blog" class="btn btn-outline" style="display:inline-flex;margin-bottom:32px">
+        <i class="fa-solid fa-arrow-left"></i> Назад к блогу
+      </a>
+      <div class="feature-icon" style="margin-bottom:20px"><i class="fa-solid fa-code-compare"></i></div>
+      <span class="news-tag"><i class="fa-solid fa-flask"></i> Технологии</span>
+      <div class="news-date" style="margin-top:10px;margin-bottom:16px"><i class="fa-regular fa-calendar"></i> 28.03.2025</div>
+      <h1 style="font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.2;margin-bottom:24px">
+        WireGuard vs OpenVPN:<br><span class="grad">какой протокол выбрать?</span>
+      </h1>
+    </div>
+
+    <div class="card" style="padding:36px;line-height:1.85;color:var(--text-sub);font-size:15px">
+
+      <p>Если вы хоть немного разбирались в теме VPN, вы наверняка слышали эти два названия. WireGuard — молодой и агрессивно быстрый. OpenVPN — ветеран с безупречной репутацией. Разбираем, что выбрать и почему в 2025 году ответ уже не так очевиден.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-bolt" style="color:var(--accent-glow);margin-right:10px"></i>WireGuard — молодой чемпион</h2>
+      <p>WireGuard появился в 2015 году и сразу взорвал индустрию. Его главная особенность — безумная минималистичность: всего около 4000 строк кода против 70 000+ у OpenVPN. Меньше кода — меньше уязвимостей — проще аудит безопасности.</p>
+      <p>WireGuard использует современные криптографические примитивы: ChaCha20, Poly1305, Curve25519. Всё это работает быстрее AES на устройствах без аппаратного ускорения — то есть на большинстве смартфонов.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-shield-halved" style="color:var(--accent-glow);margin-right:10px"></i>OpenVPN — проверенный ветеран</h2>
+      <p>OpenVPN существует с 2001 года. За это время он прошёл тысячи аудитов безопасности, работал в корпоративных сетях и государственных организациях по всему миру. Его главные преимущества — гибкость конфигурации и устойчивость к блокировкам: он умеет работать через TCP на порту 443, маскируясь под HTTPS.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-table" style="color:var(--accent-glow);margin-right:10px"></i>Сравнение в таблице</h2>
+
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Параметр</th>
+              <th>WireGuard</th>
+              <th>OpenVPN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Скорость</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Быстрее на 30–70%</td>
+              <td>Медленнее</td>
+            </tr>
+            <tr>
+              <td>Объём кода</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> ~4 000 строк</td>
+              <td>70 000+ строк</td>
+            </tr>
+            <tr>
+              <td>Задержка (пинг)</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Минимальная</td>
+              <td>Выше</td>
+            </tr>
+            <tr>
+              <td>Устойчивость к блокировкам</td>
+              <td class="neutral">Средняя</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Высокая (TCP 443)</td>
+            </tr>
+            <tr>
+              <td>Гибкость настройки</td>
+              <td>Ограниченная</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Очень высокая</td>
+            </tr>
+            <tr>
+              <td>Простота настройки</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Простая</td>
+              <td>Сложнее</td>
+            </tr>
+            <tr>
+              <td>Поддержка платформ</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Все + встроен в Linux</td>
+              <td>Все платформы</td>
+            </tr>
+            <tr>
+              <td>Потребление батареи</td>
+              <td class="win"><i class="fa-solid fa-trophy"></i> Меньше</td>
+              <td>Больше</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-flag-checkered" style="color:var(--accent-glow);margin-right:10px"></i>Итог: кому что выбирать?</h2>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card" style="padding:18px 20px;background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.2)">
+          <p style="margin:0 0 6px 0;color:var(--text-main);font-weight:700"><i class="fa-solid fa-bolt" style="color:#4ADE80;margin-right:8px"></i>WireGuard — если приоритет скорость</p>
+          <p style="margin:0">Стриминг, игры, повседневное использование. На смартфоне почти не садит батарею. Современные алгоритмы шифрования. Идеально для большинства пользователей.</p>
+        </div>
+        <div class="card" style="padding:18px 20px;background:rgba(168,85,247,0.06);border-color:rgba(168,85,247,0.2)">
+          <p style="margin:0 0 6px 0;color:var(--text-main);font-weight:700"><i class="fa-solid fa-shield-halved" style="color:var(--accent-glow);margin-right:8px"></i>OpenVPN — если нужно обходить жёсткие блокировки</p>
+          <p style="margin:0">Страны с жёсткой цензурой интернета, корпоративные сети с глубокой инспекцией трафика. OpenVPN через TCP/443 сложнее всего заблокировать.</p>
+        </div>
+      </div>
+
+      <div class="card" style="background:rgba(168,85,247,0.08);border-color:rgba(168,85,247,0.25);margin-top:24px;padding:20px 24px">
+        <p style="margin:0;color:var(--text-main)"><i class="fa-solid fa-lightbulb" style="color:var(--accent-glow);margin-right:8px"></i>BUILD VPN поддерживает оба протокола. А для самых сложных случаев — Bridge-серверы с маскировкой трафика, которые работают даже там, где обычный VPN не справляется.</p>
+      </div>
+
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;margin-bottom:80px">
+      <a href="https://t.me/buildvpn_io" target="_blank" class="btn btn-primary"><i class="fa-brands fa-telegram"></i> Telegram-канал</a>
+      <a href="https://t.me/buildvpnbot" target="_blank" class="btn btn-outline"><i class="fa-solid fa-robot"></i> Telegram-бот</a>
+      <a href="/blog" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Назад к блогу</a>
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/#pricing" class="nav-item"><i class="fa-solid fa-tag"></i><span>Тарифы</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/profile" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script src="/script.js"></script>
+</body>
+</html>

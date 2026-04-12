@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5 признаков, что провайдер вас замедляет — BUILD VPN</title>
+  <meta name="description" content="Как понять, что провайдер намеренно режет скорость интернета. 5 верных признаков и как с этим бороться.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <div class="container" style="max-width:780px">
+    <div style="padding-top:60px;margin-bottom:40px">
+      <a href="/blog" class="btn btn-outline" style="display:inline-flex;margin-bottom:32px">
+        <i class="fa-solid fa-arrow-left"></i> Назад к блогу
+      </a>
+      <div class="feature-icon" style="margin-bottom:20px"><i class="fa-solid fa-signal"></i></div>
+      <span class="news-tag"><i class="fa-solid fa-eye"></i> Провайдеры</span>
+      <div class="news-date" style="margin-top:10px;margin-bottom:16px"><i class="fa-regular fa-calendar"></i> 01.04.2025</div>
+      <h1 style="font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.2;margin-bottom:24px">
+        5 признаков,<br><span class="grad">что провайдер вас замедляет</span>
+      </h1>
+    </div>
+
+    <div class="card" style="padding:36px;line-height:1.85;color:var(--text-sub);font-size:15px">
+
+      <p>Ваш YouTube тормозит при 1080p, хотя тарифный план «100 Мбит/с»? Торренты ползут как улитки, но Netflix почему-то работает отлично? Возможно, дело не в вашем интернете, а в том, что провайдер целенаправленно замедляет отдельные сервисы. Это называется <strong style="color:var(--text-main)">throttling</strong> — дросселирование трафика.</p>
+
+      <div class="card" style="background:rgba(234,179,8,0.06);border-color:rgba(234,179,8,0.25);margin:20px 0;padding:20px 24px">
+        <p style="margin:0;color:var(--text-main)"><i class="fa-solid fa-circle-info" style="color:#EAB308;margin-right:8px"></i>Провайдеры используют технологию <strong>DPI (Deep Packet Inspection)</strong> — глубокую инспекцию пакетов — чтобы различать типы трафика и замедлять конкретные сервисы или протоколы.</p>
+      </div>
+
+      <!-- Признак 1 -->
+      <div style="margin:24px 0">
+        <h2 style="color:var(--text-main);font-size:19px;font-weight:700;display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#EC4899);font-size:16px;font-weight:800;flex-shrink:0">1</span>
+          YouTube тормозит, а другие видео — нет
+        </h2>
+        <p>Если вы замечаете, что YouTube грузит долго или снижает качество до 480p, хотя VK Видео и RuTube работают без проблем — это классический признак замедления YouTube. Провайдер может замедлять трафик конкретно с серверов Google.</p>
+        <p><strong style="color:var(--text-main)">Проверка:</strong> включите VPN и попробуйте YouTube снова. Если скорость резко выросла — дело в провайдере, не в вашем железе.</p>
+      </div>
+
+      <!-- Признак 2 -->
+      <div style="margin:24px 0">
+        <h2 style="color:var(--text-main);font-size:19px;font-weight:700;display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#EC4899);font-size:16px;font-weight:800;flex-shrink:0">2</span>
+          Торренты качают медленно в любое время суток
+        </h2>
+        <p>Многие провайдеры намеренно ограничивают p2p-трафик (BitTorrent и подобные протоколы). DPI легко распознаёт торрент-трафик по его характерным сигнатурам. Даже если у вас тариф «безлимит» — торренты могут намеренно ограничиваться до 1–2 Мбит/с.</p>
+        <p><strong style="color:var(--text-main)">Проверка:</strong> запустите скачивание торрента и одновременно сделайте speedtest на fast.com. Если результаты сильно расходятся — замедление есть.</p>
+      </div>
+
+      <!-- Признак 3 -->
+      <div style="margin:24px 0">
+        <h2 style="color:var(--text-main);font-size:19px;font-weight:700;display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#EC4899);font-size:16px;font-weight:800;flex-shrink:0">3</span>
+          Скорость в speedtest высокая, но в реальности всё медленнее
+        </h2>
+        <p>Это самый коварный признак. Многие провайдеры «обеляют» трафик к серверам speedtest.net и fast.com, показывая полную скорость тарифа. Но при этом реальный трафик — к YouTube, зарубежным сайтам, торрентам — идёт намного медленнее.</p>
+        <p><strong style="color:var(--text-main)">Проверка:</strong> используйте наш Speedtest через VPN и без — и сравните реальное качество загрузки внешних файлов.</p>
+      </div>
+
+      <!-- Признак 4 -->
+      <div style="margin:24px 0">
+        <h2 style="color:var(--text-main);font-size:19px;font-weight:700;display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#EC4899);font-size:16px;font-weight:800;flex-shrink:0">4</span>
+          Стриминговые игры и облачный гейминг лагают
+        </h2>
+        <p>Steam Remote Play, Xbox Cloud Gaming, NVIDIA GeForce Now — всё это чувствительно к стабильному пингу и пропускной способности. Если игровой стриминг постоянно лагает при высоком speedtest — провайдер может применять QoS (Quality of Service) и понижать приоритет игрового трафика.</p>
+      </div>
+
+      <!-- Признак 5 -->
+      <div style="margin:24px 0">
+        <h2 style="color:var(--text-main);font-size:19px;font-weight:700;display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#EC4899);font-size:16px;font-weight:800;flex-shrink:0">5</span>
+          После 20:00 всё начинает тормозить
+        </h2>
+        <p>Пиковые часы — вечер с 19 до 23. Если именно в это время YouTube, Twitch и стриминговые сервисы начинают тормозить — это может быть как реальная перегрузка сети, так и намеренный throttling в часы пиковой нагрузки. VPN помогает и в том, и в другом случае, маршрутизируя трафик через менее загруженные каналы.</p>
+      </div>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-shield-halved" style="color:var(--accent-glow);margin-right:10px"></i>Как бороться с throttling?</h2>
+      <p>VPN шифрует трафик так, что DPI не может определить его тип. Провайдер видит просто зашифрованный поток данных — и не может применить ограничения к конкретным сервисам. После подключения к BUILD VPN YouTube, торренты и все остальные сервисы работают на полной скорости.</p>
+
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;margin-bottom:80px">
+      <a href="https://t.me/buildvpn_io" target="_blank" class="btn btn-primary"><i class="fa-brands fa-telegram"></i> Telegram-канал</a>
+      <a href="https://t.me/buildvpnbot" target="_blank" class="btn btn-outline"><i class="fa-solid fa-robot"></i> Telegram-бот</a>
+      <a href="/blog" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Назад к блогу</a>
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/#pricing" class="nav-item"><i class="fa-solid fa-tag"></i><span>Тарифы</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/profile" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script src="/script.js"></script>
+</body>
+</html>

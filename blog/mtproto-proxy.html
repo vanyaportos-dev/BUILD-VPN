@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTProto прокси — что это и как он спасает Telegram — BUILD VPN</title>
+  <meta name="description" content="Всё о протоколе MTProto: как работает, зачем нужен и как Telegram выживает в условиях блокировок.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <div class="container" style="max-width:780px">
+    <div style="padding-top:60px;margin-bottom:40px">
+      <a href="/blog" class="btn btn-outline" style="display:inline-flex;margin-bottom:32px">
+        <i class="fa-solid fa-arrow-left"></i> Назад к блогу
+      </a>
+      <div class="feature-icon" style="margin-bottom:20px"><i class="fa-brands fa-telegram"></i></div>
+      <span class="news-tag"><i class="fa-solid fa-shield-halved"></i> Безопасность</span>
+      <div class="news-date" style="margin-top:10px;margin-bottom:16px"><i class="fa-regular fa-calendar"></i> 04.04.2025</div>
+      <h1 style="font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.2;margin-bottom:24px">
+        MTProto прокси — что это<br><span class="grad">и как он спасает Telegram</span>
+      </h1>
+    </div>
+
+    <div class="card" style="padding:36px;line-height:1.85;color:var(--text-sub);font-size:15px">
+
+      <p>Telegram — один из немногих мессенджеров, который умудряется работать даже там, где заблокировано всё остальное. Один из главных секретов его живучести — собственный протокол MTProto и специальные прокси-серверы на его основе.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-microscope" style="color:var(--accent-glow);margin-right:10px"></i>Что такое MTProto?</h2>
+      <p>MTProto (Mobile Transport Protocol) — это протокол шифрования и передачи данных, разработанный командой Telegram. Он создавался с нуля с двумя главными целями: максимальная скорость на мобильных устройствах и устойчивость к цензуре.</p>
+      <p>В отличие от обычных протоколов, MTProto использует хитрые технические решения, которые затрудняют его идентификацию системами глубокой инспекции пакетов (DPI) — именно с помощью DPI провайдеры и блокируют сервисы.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-route" style="color:var(--accent-glow);margin-right:10px"></i>Как работает MTProto-прокси?</h2>
+
+      <div class="card" style="background:rgba(168,85,247,0.08);border-color:rgba(168,85,247,0.25);margin-bottom:20px;padding:20px 24px">
+        <p style="margin:0;color:var(--text-main)">Обычная схема: <strong>Ваше устройство → Провайдер → Сервер Telegram</strong><br>
+        Схема с прокси: <strong>Ваше устройство → MTProto-прокси → Сервер Telegram</strong></p>
+      </div>
+
+      <p>Прокси-сервер работает как посредник. Ваш клиент Telegram подключается к прокси-серверу (он выглядит для провайдера как обычный зашифрованный сайт), а прокси уже передаёт данные напрямую в Telegram. Провайдер видит просто зашифрованный HTTPS-трафик — ему не за что зацепиться.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-list-check" style="color:var(--accent-glow);margin-right:10px"></i>MTProto vs обычный прокси: в чём разница?</h2>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <i class="fa-solid fa-check-circle" style="color:#4ADE80;margin-top:3px;flex-shrink:0"></i>
+          <span><strong style="color:var(--text-main)">Разработан специально для Telegram.</strong> Обычный SOCKS5-прокси работает медленнее и легче детектируется.</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <i class="fa-solid fa-check-circle" style="color:#4ADE80;margin-top:3px;flex-shrink:0"></i>
+          <span><strong style="color:var(--text-main)">Шифрование на уровне протокола.</strong> Данные зашифрованы уже на стороне клиента, прокси-сервер не видит содержимое ваших сообщений.</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <i class="fa-solid fa-check-circle" style="color:#4ADE80;margin-top:3px;flex-shrink:0"></i>
+          <span><strong style="color:var(--text-main)">Маскировка трафика.</strong> В режиме obfuscation трафик выглядит как обычный зашифрованный веб-трафик.</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <i class="fa-solid fa-check-circle" style="color:#4ADE80;margin-top:3px;flex-shrink:0"></i>
+          <span><strong style="color:var(--text-main)">Встроен в официальный клиент.</strong> Настройка занимает 30 секунд прямо в Настройки → Данные и хранилище → Прокси.</span>
+        </div>
+      </div>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-circle-exclamation" style="color:#EAB308;margin-right:10px"></i>Ограничения MTProto-прокси</h2>
+      <p>Важно понимать: MTProto-прокси работает <strong style="color:var(--text-main)">только для Telegram</strong>. Для YouTube, Instagram и других сервисов он бесполезен. Если вам нужна свобода во всём браузере и на всех приложениях — нужен полноценный VPN.</p>
+
+      <h2 style="color:var(--text-main);font-size:20px;font-weight:700;margin:28px 0 12px"><i class="fa-solid fa-bridge" style="color:var(--accent-glow);margin-right:10px"></i>Bridge-серверы BUILD VPN — та же идея, но для всего</h2>
+      <p>Bridge-серверы в BUILD VPN используют похожую технику маскировки, но на уровне всего VPN-соединения. Они маскируют весь ваш трафик под обычный HTTPS — и именно поэтому работают даже там, где обычные VPN заблокированы.</p>
+
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;margin-bottom:80px">
+      <a href="https://t.me/buildvpn_io" target="_blank" class="btn btn-primary"><i class="fa-brands fa-telegram"></i> Telegram-канал</a>
+      <a href="https://t.me/buildvpnbot" target="_blank" class="btn btn-outline"><i class="fa-solid fa-robot"></i> Telegram-бот</a>
+      <a href="/blog" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Назад к блогу</a>
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/#pricing" class="nav-item"><i class="fa-solid fa-tag"></i><span>Тарифы</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/profile" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script src="/script.js"></script>
+</body>
+</html>
