@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/news", "destination": "/news.html" },
+    { "source": "/servers", "destination": "/servers.html" },
+    { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/blog", "destination": "/blog/index.html" }
+  ]
+}
