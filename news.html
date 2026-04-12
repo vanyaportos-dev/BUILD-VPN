@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новости — BUILD VPN</title>
+  <meta name="description" content="Новости и обновления BUILD VPN.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Blobs -->
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <div class="page-header">
+    <h1>Новости <span class="grad">BUILD VPN</span></h1>
+    <p>Следите за обновлениями и акциями</p>
+  </div>
+
+  <div class="container">
+    <div class="news-grid">
+
+      <div class="card news-card">
+        <span class="news-tag"><i class="fa-solid fa-server"></i> Серверы</span>
+        <div class="news-date"><i class="fa-regular fa-calendar"></i> 10.04.2025</div>
+        <h2>Новые серверы в Азии</h2>
+        <p>Мы добавили новые серверы в Сингапуре и Токио. Пользователи из Азии и тех, кто работает с азиатскими сервисами, теперь получат значительно более низкий пинг и высокую скорость. Серверы уже доступны через бот @buildvpn_bot.</p>
+      </div>
+
+      <div class="card news-card">
+        <span class="news-tag"><i class="fa-solid fa-tag"></i> Акция</span>
+        <div class="news-date"><i class="fa-regular fa-calendar"></i> 05.04.2025</div>
+        <h2>Скидка 30% на годовой тариф</h2>
+        <p>До конца апреля действует специальная акция: скидка 30% на тариф на 12 месяцев. Успейте оформить подписку по выгодной цене и защититься на целый год. Акция действует ограниченное время.</p>
+      </div>
+
+      <div class="card news-card">
+        <span class="news-tag"><i class="fa-solid fa-code"></i> Технологии</span>
+        <div class="news-date"><i class="fa-regular fa-calendar"></i> 01.04.2025</div>
+        <h2>Обновление протоколов</h2>
+        <p>Мы обновили протоколы соединения на всех серверах. Скорость соединения увеличилась на 25–40%, а стабильность значительно улучшилась. Все существующие ключи продолжают работать без каких-либо изменений с вашей стороны.</p>
+      </div>
+
+    </div>
+
+    <div class="news-cta">
+      <p><i class="fa-brands fa-telegram"></i> Подпишись на <a href="https://t.me/buildvpn_io" target="_blank" style="color:var(--accent-glow);font-weight:700">@buildvpn_io</a>, чтобы не пропустить обновления</p>
+      <a href="https://t.me/buildvpn_io" target="_blank" class="btn btn-primary">
+        <i class="fa-brands fa-telegram"></i> Подписаться на канал
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers">
+    <i class="fa-solid fa-server"></i>
+    <span>Серверы</span>
+  </a>
+  <a href="/news" class="nav-item" id="nav-news">
+    <i class="fa-solid fa-newspaper"></i>
+    <span>Новости</span>
+  </a>
+  <a href="/#faq" class="nav-item">
+    <i class="fa-solid fa-circle-question"></i>
+    <span>FAQ</span>
+  </a>
+  <a href="/#pricing" class="nav-item">
+    <i class="fa-solid fa-tag"></i>
+    <span>Тарифы</span>
+  </a>
+  <button class="nav-item" id="nav-speed">
+    <i class="fa-solid fa-gauge-high"></i>
+    <span>Speedtest</span>
+  </button>
+  <a href="/profile" class="nav-item" id="nav-profile">
+    <i class="fa-solid fa-user"></i>
+    <span>Профиль</span>
+  </a>
+</nav>
+
+<!-- SPEED MODAL -->
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="speed-bar"></div>
+    </div>
+    <div class="speed-result">
+      <i class="fa-solid fa-satellite-dish speed-icon ping"></i>
+      <div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div>
+    </div>
+    <div class="speed-result">
+      <i class="fa-solid fa-arrow-down speed-icon dl"></i>
+      <div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div>
+    </div>
+    <div class="speed-result">
+      <i class="fa-solid fa-arrow-up speed-icon ul"></i>
+      <div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div>
+    </div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px">
+      <i class="fa-solid fa-rotate"></i> Запустить снова
+    </button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
