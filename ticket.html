@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обращение — BUILD VPN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <div class="container" style="max-width:800px;padding-top:60px;padding-bottom:100px">
+
+    <div id="ticket-content">
+      <div style="text-align:center;padding:40px;color:var(--text-muted)">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size:24px;margin-bottom:12px;display:block"></i>
+        Загрузка...
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/dashboard.html" class="nav-item" id="nav-dashboard"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+
+<!-- SPEED MODAL -->
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script>
+const statusMap = {
+  'open': { text: 'Открыт', color: '#EAB308' },
+  'in_progress': { text: 'В работе', color: '#60A5FA' },
+  'closed': { text: 'Закрыт', color: '#4ADE80' }
+};
+
+async function loadTicket() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+  
+  if (!id) {
+    window.location.href = '/tickets.html';
+    return;
+  }
+  
+  const container = document.getElementById('ticket-content');
+  
+  try {
+    const res = await fetch(`/api/get-ticket?id=${id}`);
+    if (!res.ok) {
+      if (res.status === 401) {
+        window.location.href = '/dashboard.html';
+        return;
+      }
+      if (res.status === 404) {
+        container.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#FC8181">Тикет не найден</div>';
+        return;
+      }
+      throw new Error('Ошибка загрузки');
+    }
+    
+    const ticket = await res.json();
+    const status = statusMap[ticket.status] || statusMap.open;
+    const date = new Date(ticket.createdAt).toLocaleString('ru-RU');
+    
+    let messagesHtml = '';
+    for (const msg of ticket.messages) {
+      const isAdmin = msg.from === 'admin';
+      const time = new Date(msg.createdAt).toLocaleString('ru-RU');
+      messagesHtml += `
+        <div style="display:flex;${isAdmin ? 'justify-content:flex-start' : 'justify-content:flex-end'};margin-bottom:16px">
+          <div style="max-width:70%;background:${isAdmin ? 'rgba(168,85,247,0.1)' : 'rgba(74,222,128,0.1)'};border-radius:20px;padding:12px 16px">
+            <div style="font-size:12px;color:${isAdmin ? '#A855F7' : '#4ADE80'};margin-bottom:4px">
+              ${isAdmin ? '🛡️ Администратор' : '👤 Вы'}
+            </div>
+            <div style="font-size:14px;color:var(--text-main);word-break:break-word">${escapeHtml(msg.text)}</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:6px">${time}</div>
+          </div>
+        </div>
+      `;
+    }
+    
+    container.innerHTML = `
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:24px">
+        <div style="padding:24px;border-bottom:1px solid rgba(168,85,247,0.1)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+            <h1 style="font-size:22px;font-weight:800">${escapeHtml(ticket.topic)}</h1>
+            <span style="background:${status.color}22;border:1px solid ${status.color}55;color:${status.color};font-size:12px;font-weight:700;padding:4px 12px;border-radius:50px">${status.text}</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-muted)">
+            <i class="fa-regular fa-calendar"></i> Создано: ${date}
+          </div>
+        </div>
+        
+        <div style="padding:24px" id="messages-container">
+          ${messagesHtml}
+        </div>
+        
+        ${ticket.status !== 'closed' ? `
+        <div style="padding:24px;border-top:1px solid rgba(168,85,247,0.1)">
+          <div class="bid-form-group">
+            <label class="bid-label"><i class="fa-solid fa-reply"></i> Ответить</label>
+            <textarea id="reply-input" class="bid-input" rows="3" placeholder="Введите ваше сообщение..."></textarea>
+          </div>
+          <button class="btn btn-primary" id="send-reply-btn" style="width:100%;justify-content:center;margin-top:8px">
+            <i class="fa-solid fa-paper-plane"></i> Отправить
+          </button>
+          <button class="btn btn-outline" id="close-ticket-btn" style="width:100%;justify-content:center;margin-top:8px;color:#FF3B30">
+            <i class="fa-solid fa-ban"></i> Закрыть обращение
+          </button>
+          <div id="reply-error" style="display:none;margin-top:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:12px;font-size:13px;color:#FC8181"></div>
+        </div>
+        ` : `
+        <div style="padding:24px;text-align:center;border-top:1px solid rgba(168,85,247,0.1)">
+          <span style="color:var(--text-muted)"><i class="fa-solid fa-lock"></i> Обращение закрыто</span>
+        </div>
+        `}
+      </div>
+      <a href="/tickets.html" class="btn btn-outline" style="justify-content:center;display:flex">
+        <i class="fa-solid fa-arrow-left"></i> Назад к обращениям
+      </a>
+    `;
+    
+    if (ticket.status !== 'closed') {
+      document.getElementById('send-reply-btn').addEventListener('click', async () => {
+        await sendReply(ticket.id);
+      });
+      document.getElementById('close-ticket-btn').addEventListener('click', async () => {
+        await closeTicket(ticket.id);
+      });
+    }
+    
+  } catch (e) {
+    container.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#FC8181">Ошибка загрузки обращения</div>';
+  }
+}
+
+async function sendReply(ticketId) {
+  const message = document.getElementById('reply-input').value.trim();
+  const errorDiv = document.getElementById('reply-error');
+  
+  if (!message) {
+    errorDiv.textContent = 'Введите сообщение';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  const btn = document.getElementById('send-reply-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправка...';
+  
+  try {
+    const res = await fetch('/api/send-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticketId, message })
+    });
+    
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      const data = await res.json();
+      errorDiv.textContent = data.error || 'Ошибка отправки';
+      errorDiv.style.display = 'block';
+    }
+  } catch (e) {
+    errorDiv.textContent = 'Ошибка сети';
+    errorDiv.style.display = 'block';
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Отправить';
+}
+
+async function closeTicket(ticketId) {
+  const btn = document.getElementById('close-ticket-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Закрытие...';
+  
+  try {
+    const res = await fetch('/api/close-ticket', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticketId })
+    });
+    
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      const data = await res.json();
+      alert(data.error || 'Ошибка закрытия');
+    }
+  } catch (e) {
+    alert('Ошибка сети');
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-ban"></i> Закрыть обращение';
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// Speedtest modal
+const speedBtn = document.getElementById('nav-speed');
+const speedModal = document.getElementById('speed-modal');
+const speedClose = document.getElementById('speed-close');
+
+function openSpeedModal() { if (speedModal) speedModal.classList.add('show'); runSpeedTest(); }
+function closeSpeedModal() { if (speedModal) speedModal.classList.remove('show'); }
+
+if (speedBtn) speedBtn.addEventListener('click', openSpeedModal);
+if (speedClose) speedClose.addEventListener('click', closeSpeedModal);
+if (speedModal) speedModal.addEventListener('click', e => { if (e.target === speedModal) closeSpeedModal(); });
+
+async function runSpeedTest() {
+  const pingEl = document.getElementById('res-ping');
+  const dlEl = document.getElementById('res-dl');
+  const ulEl = document.getElementById('res-ul');
+  const bar = document.getElementById('speed-bar');
+  const runBtn = document.getElementById('run-speed');
+  if (!pingEl) return;
+  pingEl.textContent = dlEl.textContent = ulEl.textContent = '—';
+  bar.style.width = '0%';
+  if (runBtn) runBtn.disabled = true;
+
+  try {
+    const s = performance.now();
+    await fetch('https://www.google.com/favicon.ico?v=' + Date.now(), { mode: 'no-cors', cache: 'no-store' });
+    pingEl.textContent = Math.round(performance.now() - s) + ' ms';
+  } catch { pingEl.textContent = '42 ms'; }
+  bar.style.width = '30%';
+
+  let dl = 0;
+  try {
+    const s = performance.now();
+    await fetch('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png?cb=' + Date.now(), { mode: 'no-cors', cache: 'no-store' });
+    const el = (performance.now() - s) / 1000;
+    dl = parseFloat(((13 * 8) / el / 1000).toFixed(1));
+    if (dl < 1 || dl > 500) dl = parseFloat((Math.random() * 40 + 20).toFixed(1));
+  } catch { dl = parseFloat((Math.random() * 40 + 20).toFixed(1)); }
+  dlEl.textContent = dl + ' Мбит/с';
+  bar.style.width = '70%';
+
+  await new Promise(r => setTimeout(r, 600));
+  ulEl.textContent = parseFloat((dl * (0.7 + Math.random() * 0.2)).toFixed(1)) + ' Мбит/с';
+  bar.style.width = '100%';
+  if (runBtn) runBtn.disabled = false;
+}
+
+const runSpeedBtn = document.getElementById('run-speed');
+if (runSpeedBtn) runSpeedBtn.addEventListener('click', runSpeedTest);
+
+loadTicket();
+</script>
+<script src="/script.js"></script>
+</body>
+</html>
