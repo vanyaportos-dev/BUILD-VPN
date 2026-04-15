@@ -75,7 +75,7 @@ async function loadTicket() {
   const container = document.getElementById('ticket-content');
   
   try {
-    const res = await fetch(`/api/get-ticket?id=${id}`);
+    const res = await fetch(`/api/get?action=get-ticket&id=${id}`);
     if (!res.ok) {
       if (res.status === 401) {
         window.location.href = '/dashboard.html';
@@ -179,10 +179,10 @@ async function sendReply(ticketId) {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправка...';
   
   try {
-    const res = await fetch('/api/send-message', {
+    const res = await fetch('/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ticketId, message })
+      body: JSON.stringify({ action: 'send-message', ticketId, message })
     });
     
     if (res.ok) {
@@ -207,10 +207,10 @@ async function closeTicket(ticketId) {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Закрытие...';
   
   try {
-    const res = await fetch('/api/close-ticket', {
+    const res = await fetch('/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ticketId })
+      body: JSON.stringify({ action: 'close-ticket', ticketId })
     });
     
     if (res.ok) {

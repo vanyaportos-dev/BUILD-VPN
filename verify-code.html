@@ -94,10 +94,10 @@ document.getElementById('vc-submit').addEventListener('click', async () => {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Активируем...';
 
   try {
-    const r = await fetch('/api/verify-code', {
+    const r = await fetch('/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, nick })
+      body: JSON.stringify({ action: 'verify-code', code, nick })
     });
     const data = await r.json();
 

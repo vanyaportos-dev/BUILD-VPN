@@ -93,10 +93,10 @@ document.getElementById('bid-submit').addEventListener('click', async () => {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправляем...';
 
   try {
-    const r = await fetch('/api/save-request', {
+    const r = await fetch('/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username })
+      body: JSON.stringify({ action: 'save-request', username })
     });
     const data = await r.json();
     if (r.ok) {

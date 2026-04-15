@@ -93,7 +93,7 @@ async function loadTickets() {
   const container = document.getElementById('tickets-list');
   
   try {
-    const res = await fetch('/api/get-my-tickets');
+    const res = await fetch('/api/get?action=get-my-tickets');
     if (!res.ok) {
       if (res.status === 401) {
         window.location.href = '/dashboard.html';
@@ -167,10 +167,10 @@ document.getElementById('create-ticket-btn').addEventListener('click', async () 
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправка...';
   
   try {
-    const res = await fetch('/api/create-ticket', {
+    const res = await fetch('/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic, message })
+      body: JSON.stringify({ action: 'create-ticket', topic, message })
     });
     
     if (res.ok) {
