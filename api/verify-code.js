@@ -1,4 +1,19 @@
 import { kv } from '@vercel/kv';
+import crypto from 'crypto';
+
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function generateBackupCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    if (i === 4) code += '-';
+    else code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,13 +40,30 @@ export default async function handler(req, res) {
   if (entry.status === 'active') return res.status(409).json({ error: 'BUILD ID уже активирован' });
   if (entry.status !== 'ready') return res.status(409).json({ error: 'Код ещё не активирован администратором' });
 
+  // Генерируем резервный код
+  const backupCode = generateBackupCode();
+  const token = generateToken();
+
   const updated = {
     ...entry,
     status: 'active',
     nick: cleanNick,
     activatedAt: new Date().toISOString(),
+    token: token,
+    backupCode: backupCode
   };
   await kv.set(`bid:${username}`, updated);
+  await kv.set(`bid:token:${token}`, username);
+  await kv.set(`bid:backup:${backupCode}`, username);
 
-  return res.status(200).json({ ok: true, username, nick: cleanNick, code: cleanCode });
+  // Устанавливаем куку
+  res.setHeader('Set-Cookie', `build_token=${token}; Path=/; Max-Age=2592000; HttpOnly; SameSite=Lax`);
+
+  return res.status(200).json({ 
+    ok: true, 
+    username, 
+    nick: cleanNick, 
+    code: cleanCode, 
+    backupCode 
+  });
 }
