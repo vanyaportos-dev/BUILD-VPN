@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+<body>
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<main>
+  <div class="container" style="max-width:540px;padding-top:60px;padding-bottom:100px">
+
+    <div class="page-header" style="padding:0 0 32px">
+      <div class="feature-icon" style="margin-bottom:20px"><i class="fa-solid fa-id-badge"></i></div>
+      <h1 style="font-size:clamp(28px,5vw,42px);font-weight:800;margin-bottom:12px">
+        Получи свой <span class="grad">BUILD ID</span>
+      </h1>
+      <p style="color:var(--text-sub);font-size:15px;line-height:1.7">
+        Уникальный идентификатор в экосистеме BUILD VPN.<br>
+        Введи свой Telegram username — мы обработаем заявку.
+      </p>
+    </div>
+
+    <div class="card" style="padding:32px">
+
+      <div class="bid-form-group">
+        <label class="bid-label"><i class="fa-brands fa-telegram"></i> Telegram Username</label>
+        <div class="bid-input-wrap">
+          <span class="bid-at">@</span>
+          <input type="text" id="bid-username" class="bid-input" placeholder="yourname" maxlength="32" autocomplete="off" spellcheck="false">
+        </div>
+        <p class="bid-hint">Без @, только латиница, цифры и _</p>
+      </div>
+
+      <button class="btn btn-primary" id="bid-submit" style="width:100%;justify-content:center;margin-top:8px">
+        <i class="fa-solid fa-paper-plane"></i> Запросить BUILD ID
+      </button>
+
+      <div id="bid-result" style="display:none;margin-top:20px"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px;padding:20px 24px;display:flex;align-items:center;gap:16px">
+      <i class="fa-solid fa-circle-info" style="font-size:20px;color:var(--accent-purple);flex-shrink:0"></i>
+      <p style="font-size:13px;color:var(--text-sub);line-height:1.6;margin:0">
+        Уже подали заявку? Проверьте статус на странице
+        <a href="/my-codes.html" style="color:var(--accent-glow);font-weight:600">Мои коды</a>.
+      </p>
+    </div>
+
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/dashboard.html" class="nav-item" id="nav-dashboard"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('bid-submit').addEventListener('click', async () => {
+  const btn = document.getElementById('bid-submit');
+  const input = document.getElementById('bid-username');
+  const result = document.getElementById('bid-result');
+  const username = input.value.trim().replace(/^@/, '');
+
+  if (!username) { showBidMsg('error', 'Введи Telegram username'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправляем...';
+
+  try {
+    const r = await fetch('/api/save-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    });
+    const data = await r.json();
+    if (r.ok) {
+      showBidMsg('success', '✅ Заявка принята! Код появится на странице <a href="/my-codes.html" style="color:var(--accent-glow)">Мои коды</a> после обработки администратором.');
+      input.value = '';
+    } else {
+      showBidMsg('error', data.error || 'Ошибка. Попробуй снова.');
+    }
+  } catch (e) {
+    showBidMsg('error', 'Ошибка сети. Проверь соединение.');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Запросить BUILD ID';
+});
+
+function showBidMsg(type, html) {
+  const el = document.getElementById('bid-result');
+  el.style.display = 'block';
+  el.className = type === 'success' ? 'bid-msg bid-msg-ok' : 'bid-msg bid-msg-err';
+  el.innerHTML = html;
+}
+
+document.getElementById('bid-username').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('bid-submit').click();
+});
+</script>
+<script src="/script.js"></script>
+</body>
+</html>

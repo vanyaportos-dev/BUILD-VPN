@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+<body>
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<main>
+  <div class="container" style="max-width:540px;padding-top:60px;padding-bottom:100px">
+
+    <div class="page-header" style="padding:0 0 32px">
+      <div class="feature-icon" style="margin-bottom:20px"><i class="fa-solid fa-lock-open"></i></div>
+      <h1 style="font-size:clamp(26px,5vw,40px);font-weight:800;margin-bottom:12px">
+        Активация <span class="grad">BUILD ID</span>
+      </h1>
+      <p style="color:var(--text-sub);font-size:15px;line-height:1.7">
+        Введи код из страницы «Мои коды» и выбери никнейм.
+      </p>
+    </div>
+
+    <div class="card" style="padding:32px" id="vc-form">
+      <div class="bid-form-group">
+        <label class="bid-label"><i class="fa-solid fa-hashtag"></i> BUILD ID Код</label>
+        <input type="text" id="vc-code" class="bid-input" style="text-align:center;font-size:22px;font-weight:800;letter-spacing:6px;text-transform:uppercase" placeholder="A3F9K2" maxlength="6" autocomplete="off" spellcheck="false">
+        <p class="bid-hint">6 символов, без пробелов</p>
+      </div>
+
+      <div class="bid-form-group" style="margin-top:20px">
+        <label class="bid-label"><i class="fa-solid fa-signature"></i> Никнейм</label>
+        <input type="text" id="vc-nick" class="bid-input" placeholder="Твоё имя в системе" maxlength="32" autocomplete="off" spellcheck="false">
+        <p class="bid-hint">От 2 до 32 символов</p>
+      </div>
+
+      <button class="btn btn-primary" id="vc-submit" style="width:100%;justify-content:center;margin-top:8px">
+        <i class="fa-solid fa-bolt"></i> Активировать BUILD ID
+      </button>
+      <div id="vc-result" style="display:none;margin-top:20px"></div>
+    </div>
+
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/dashboard.html" class="nav-item" id="nav-dashboard"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('vc-code').addEventListener('input', function() {
+  this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+});
+
+document.getElementById('vc-submit').addEventListener('click', async () => {
+  const btn = document.getElementById('vc-submit');
+  const code = document.getElementById('vc-code').value.trim();
+  const nick = document.getElementById('vc-nick').value.trim();
+  const result = document.getElementById('vc-result');
+
+  if (code.length !== 6) { showMsg('error', 'Код должен содержать 6 символов'); return; }
+  if (!nick || nick.length < 2) { showMsg('error', 'Никнейм слишком короткий (минимум 2 символа)'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Активируем...';
+
+  try {
+    const r = await fetch('/api/verify-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, nick })
+    });
+    const data = await r.json();
+
+    if (r.ok) {
+      document.getElementById('vc-form').innerHTML = '<div style="text-align:center;padding:20px 0">' +
+        '<i class="fa-solid fa-check-circle" style="font-size:56px;color:#4ADE80;display:block;margin-bottom:20px"></i>' +
+        '<h2 style="font-size:22px;font-weight:800;margin-bottom:8px">BUILD ID активирован!</h2>' +
+        '<p style="color:var(--text-sub);margin-bottom:24px">Добро пожаловать, <strong style="color:var(--text-main)">' + data.nick + '</strong></p>' +
+        '<div class="bid-code-box" style="margin-bottom:24px">' + data.code + '</div>' +
+        '<a href="/dashboard.html?u=' + data.username + '" class="btn btn-primary" style="display:inline-flex;justify-content:center">' +
+        '<i class="fa-solid fa-user"></i> Перейти в личный кабинет</a></div>';
+    } else {
+      showMsg('error', data.error || 'Ошибка активации');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Активировать BUILD ID';
+    }
+  } catch (e) {
+    showMsg('error', 'Ошибка сети. Проверь соединение.');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Активировать BUILD ID';
+  }
+});
+
+function showMsg(type, text) {
+  const el = document.getElementById('vc-result');
+  el.style.display = 'block';
+  const isErr = type === 'error';
+  el.style.cssText = 'background:' + (isErr ? 'rgba(239,68,68,0.08)' : 'rgba(74,222,128,0.08)') + ';border:1px solid ' + (isErr ? 'rgba(239,68,68,0.3)' : 'rgba(74,222,128,0.3)') + ';border-radius:12px;padding:14px 18px;font-size:14px;color:var(--text-sub);';
+  el.textContent = text;
+}
+</script>
+<script src="/script.js"></script>
+</body>
+</html>

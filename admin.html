@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+<body>
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<main>
+  <div class="container" style="max-width:900px;padding-top:60px;padding-bottom:100px">
+
+    <!-- Auth -->
+    <div id="adm-auth">
+      <div class="page-header" style="padding:0 0 32px">
+        <div class="feature-icon" style="margin-bottom:20px"><i class="fa-solid fa-shield-halved"></i></div>
+        <h1 style="font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:12px">
+          <span class="grad">Админ</span> панель
+        </h1>
+        <p style="color:var(--text-sub)">Доступ по паролю администратора</p>
+      </div>
+      <div class="card" style="padding:32px;max-width:400px;margin:0 auto">
+        <div class="bid-form-group">
+          <label class="bid-label"><i class="fa-solid fa-lock"></i> Пароль администратора</label>
+          <input type="password" id="adm-pwd" class="bid-input" placeholder="••••••••" autocomplete="off">
+        </div>
+        <button class="btn btn-primary" id="adm-login" style="width:100%;justify-content:center;margin-top:8px">
+          <i class="fa-solid fa-right-to-bracket"></i> Войти
+        </button>
+        <div id="adm-auth-err" style="display:none;margin-top:14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--text-sub)"></div>
+      </div>
+    </div>
+
+    <!-- Panel -->
+    <div id="adm-panel" style="display:none">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:28px">
+        <h1 style="font-size:clamp(22px,4vw,32px);font-weight:800"><span class="grad">BUILD ID</span> Заявки</h1>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-outline" id="adm-refresh" style="font-size:13px">
+            <i class="fa-solid fa-rotate"></i> Обновить
+          </button>
+          <button class="btn btn-outline" id="adm-exit" style="font-size:13px">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px" id="adm-stats"></div>
+
+      <!-- Filter -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px" id="adm-filters">
+        <button class="adm-filter active" data-filter="all">Все</button>
+        <button class="adm-filter" data-filter="pending">Ожидают</button>
+        <button class="adm-filter" data-filter="ready">Готово</button>
+        <button class="adm-filter" data-filter="active">Активны</button>
+      </div>
+
+      <div id="adm-list"><p style="color:var(--text-muted);text-align:center;padding:40px">Загрузка...</p></div>
+    </div>
+
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="/servers" class="nav-item" id="nav-servers"><i class="fa-solid fa-server"></i><span>Серверы</span></a>
+  <a href="/news" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Новости</span></a>
+  <a href="/#faq" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>FAQ</span></a>
+  <a href="/dashboard.html" class="nav-item" id="nav-dashboard"><i class="fa-solid fa-user"></i><span>Профиль</span></a>
+  <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
+  <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
+</nav>
+<div class="modal-backdrop" id="speed-modal">
+  <div class="modal">
+    <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
+    <h2><span class="grad">Тест скорости</span></h2>
+    <p class="sub">Проверка качества подключения через BUILD VPN</p>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="speed-bar"></div></div>
+    <div class="speed-result"><i class="fa-solid fa-satellite-dish speed-icon ping"></i><div><div class="speed-label">Пинг</div><div class="speed-value" id="res-ping">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-down speed-icon dl"></i><div><div class="speed-label">Загрузка</div><div class="speed-value" id="res-dl">—</div></div></div>
+    <div class="speed-result"><i class="fa-solid fa-arrow-up speed-icon ul"></i><div><div class="speed-label">Отдача</div><div class="speed-value" id="res-ul">—</div></div></div>
+    <button class="btn btn-primary" id="run-speed" style="width:100%;justify-content:center;margin-top:20px"><i class="fa-solid fa-rotate"></i> Запустить снова</button>
+    <p class="modal-footer-note">Технология тестирования предоставлена BUILD VPN</p>
+  </div>
+</div>
+
+<script>
+let admPwd = '';
+let allRequests = [];
+let activeFilter = 'all';
+
+// Auth
+document.getElementById('adm-login').addEventListener('click', login);
+document.getElementById('adm-pwd').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+async function login() {
+  const btn = document.getElementById('adm-login');
+  const pwd = document.getElementById('adm-pwd').value;
+  const err = document.getElementById('adm-auth-err');
+  if (!pwd) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Проверяем...';
+
+  try {
+    const r = await fetch('/api/get-requests', { headers: { 'x-admin-password': pwd } });
+    if (r.ok) {
+      admPwd = pwd;
+      const data = await r.json();
+      allRequests = data.requests || [];
+      document.getElementById('adm-auth').style.display = 'none';
+      document.getElementById('adm-panel').style.display = 'block';
+      renderRequests();
+    } else {
+      err.style.display = 'block';
+      err.textContent = 'Неверный пароль';
+    }
+  } catch (e) {
+    err.style.display = 'block';
+    err.textContent = 'Ошибка сети';
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Войти';
+}
+
+document.getElementById('adm-refresh').addEventListener('click', async () => {
+  const btn = document.getElementById('adm-refresh');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/api/get-requests', { headers: { 'x-admin-password': admPwd } });
+    if (r.ok) { const data = await r.json(); allRequests = data.requests || []; renderRequests(); }
+  } catch {}
+  btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Обновить';
+  btn.disabled = false;
+});
+
+document.getElementById('adm-exit').addEventListener('click', () => {
+  admPwd = ''; allRequests = [];
+  document.getElementById('adm-panel').style.display = 'none';
+  document.getElementById('adm-auth').style.display = 'block';
+  document.getElementById('adm-pwd').value = '';
+  document.getElementById('adm-auth-err').style.display = 'none';
+});
+
+// Filters
+document.getElementById('adm-filters').addEventListener('click', e => {
+  const f = e.target.closest('.adm-filter');
+  if (!f) return;
+  document.querySelectorAll('.adm-filter').forEach(b => b.classList.remove('active'));
+  f.classList.add('active');
+  activeFilter = f.dataset.filter;
+  renderRequests();
+});
+
+function renderRequests() {
+  const statsEl = document.getElementById('adm-stats');
+  const listEl = document.getElementById('adm-list');
+
+  const pending = allRequests.filter(r => r.status === 'pending').length;
+  const ready   = allRequests.filter(r => r.status === 'ready').length;
+  const active  = allRequests.filter(r => r.status === 'active').length;
+
+  statsEl.innerHTML = [
+    ['Всего', allRequests.length, '#A855F7'],
+    ['Ожидают', pending, '#EAB308'],
+    ['Готово', ready, '#60A5FA'],
+    ['Активны', active, '#4ADE80'],
+  ].map(([label, val, color]) =>
+    '<div style="background:var(--card-bg);backdrop-filter:blur(12px);border:1px solid rgba(168,85,247,0.25);border-radius:12px;padding:14px 20px;min-width:100px;text-align:center">' +
+    '<div style="font-size:24px;font-weight:800;color:' + color + '">' + val + '</div>' +
+    '<div style="font-size:12px;color:var(--text-muted);margin-top:2px">' + label + '</div></div>'
+  ).join('');
+
+  const filtered = activeFilter === 'all' ? allRequests : allRequests.filter(r => r.status === activeFilter);
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">Заявок нет</p>';
+    return;
+  }
+
+  const statusLabels = { pending: ['Ожидает', '#EAB308'], ready: ['Готово', '#60A5FA'], active: ['Активен', '#4ADE80'] };
+
+  listEl.innerHTML = filtered.map(req => {
+    const [slabel, scolor] = statusLabels[req.status] || ['—', '#999'];
+    const date = req.createdAt ? new Date(req.createdAt).toLocaleString('ru-RU') : '—';
+    const code = req.code || '—';
+    const nick = req.nick || '—';
+    const canActivate = req.status === 'pending';
+
+    return '<div class="card adm-row">' +
+      '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">' +
+      '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0">' +
+      req.username[0].toUpperCase() + '</div>' +
+      '<div style="flex:1;min-width:140px">' +
+      '<div style="font-size:15px;font-weight:700;color:var(--text-main)">@' + req.username + '</div>' +
+      '<div style="font-size:12px;color:var(--text-muted);margin-top:2px">' + date + '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">' +
+      (code !== '—' ? '<span style="font-family:monospace;font-size:16px;font-weight:800;letter-spacing:3px;color:var(--accent-glow)">' + code + '</span>' : '') +
+      (nick !== '—' ? '<span style="font-size:13px;color:var(--text-sub)">/ ' + nick + '</span>' : '') +
+      '<span style="background:' + scolor + '22;border:1px solid ' + scolor + '55;color:' + scolor + ';font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px">' + slabel + '</span>' +
+      (canActivate ? '<button class="btn btn-primary adm-activate" data-user="' + req.username + '" style="font-size:12px;padding:8px 14px"><i class="fa-solid fa-bolt"></i> Активировать</button>' : '') +
+      '</div></div></div>';
+  }).join('');
+
+  // Bind activate buttons
+  document.querySelectorAll('.adm-activate').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const username = this.dataset.user;
+      this.disabled = true;
+      this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+      try {
+        const r = await fetch('/api/activate-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-password': admPwd },
+          body: JSON.stringify({ username })
+        });
+        const data = await r.json();
+        if (r.ok) {
+          const req = allRequests.find(r => r.username === username);
+          if (req) { req.status = 'ready'; req.code = data.code; }
+          renderRequests();
+        } else {
+          alert(data.error || 'Ошибка');
+          this.disabled = false;
+          this.innerHTML = '<i class="fa-solid fa-bolt"></i> Активировать';
+        }
+      } catch (e) {
+        alert('Ошибка сети');
+        this.disabled = false;
+        this.innerHTML = '<i class="fa-solid fa-bolt"></i> Активировать';
+      }
+    });
+  });
+}
+</script>
+<script src="/script.js"></script>
+</body>
+</html>

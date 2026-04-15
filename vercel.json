@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    { "source": "/news",        "destination": "/news.html" },
+    { "source": "/servers",     "destination": "/servers.html" },
+    { "source": "/profile",     "destination": "/profile.html" },
+    { "source": "/blog",        "destination": "/blog/index.html" },
+    { "source": "/build-id",    "destination": "/build-id.html" },
+    { "source": "/my-codes",    "destination": "/my-codes.html" },
+    { "source": "/verify-code", "destination": "/verify-code.html" },
+    { "source": "/dashboard",   "destination": "/dashboard.html" },
+    { "source": "/admin",       "destination": "/admin.html" }
+  ]
+}
