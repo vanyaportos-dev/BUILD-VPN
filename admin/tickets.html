@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Управление обращениями — BUILD VPN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<main>
+  <div class="container" style="max-width:1000px;padding-top:60px;padding-bottom:100px">
+
+    <div id="admin-auth" style="text-align:center;padding:60px 20px">
+      <div class="card" style="max-width:400px;margin:0 auto;padding:32px">
+        <div class="feature-icon" style="margin:0 auto 20px"><i class="fa-solid fa-lock"></i></div>
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Вход в админку</h2>
+        <p style="color:var(--text-sub);margin-bottom:24px">Введите пароль администратора</p>
+        <input type="password" id="admin-pwd" class="bid-input" placeholder="Пароль" style="margin-bottom:16px">
+        <button class="btn btn-primary" id="admin-login" style="width:100%;justify-content:center">Войти</button>
+        <div id="admin-error" style="display:none;margin-top:16px;color:#FC8181"></div>
+      </div>
+    </div>
+
+    <div id="admin-panel" style="display:none">
+      <div class="page-header" style="padding:0 0 32px">
+        <h1 style="font-size:clamp(26px,5vw,40px);font-weight:800;margin-bottom:12px">
+          Управление <span class="grad">обращениями</span>
+        </h1>
+        <p style="color:var(--text-sub);font-size:15px">Ответы на тикеты пользователей</p>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+        <button class="adm-filter active" data-filter="all">Все</button>
+        <button class="adm-filter" data-filter="open">Открытые</button>
+        <button class="adm-filter" data-filter="in_progress">В работе</button>
+        <button class="adm-filter" data-filter="closed">Закрытые</button>
+      </div>
+
+      <div id="tickets-list">
+        <div style="text-align:center;padding:40px;color:var(--text-muted)">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size:24px;margin-bottom:12px;display:block"></i>
+          Загрузка...
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+let adminPassword = '';
+let allTickets = [];
+let currentFilter = 'all';
+
+const statusMap = {
+  'open': { text: 'Открыт', color: '#EAB308' },
+  'in_progress': { text: 'В работе', color: '#60A5FA' },
+  'closed': { text: 'Закрыт', color: '#4ADE80' }
+};
+
+document.getElementById('admin-login').addEventListener('click', async () => {
+  const pwd = document.getElementById('admin-pwd').value;
+  const errorDiv = document.getElementById('admin-error');
+  
+  if (!pwd) {
+    errorDiv.textContent = 'Введите пароль';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  const btn = document.getElementById('admin-login');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Проверка...';
+  
+  try {
+    const res = await fetch('/api/admin/get-tickets', {
+      headers: { 'x-admin-password': pwd }
+    });
+    
+    if (res.ok) {
+      adminPassword = pwd;
+      document.getElementById('admin-auth').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      await loadTickets();
+    } else {
+      errorDiv.textContent = 'Неверный пароль';
+      errorDiv.style.display = 'block';
+    }
+  } catch (e) {
+    errorDiv.textContent = 'Ошибка сети';
+    errorDiv.style.display = 'block';
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = 'Войти';
+});
+
+async function loadTickets() {
+  try {
+    const res = await fetch('/api/admin/get-tickets', {
+      headers: { 'x-admin-password': adminPassword }
+    });
+    const data = await res.json();
+    allTickets = data.tickets || [];
+    renderTickets();
+  } catch (e) {
+    document.getElementById('tickets-list').innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#FC8181">Ошибка загрузки</div>';
+  }
+}
+
+function renderTickets() {
+  const filtered = currentFilter === 'all' 
+    ? allTickets 
+    : allTickets.filter(t => t.status === currentFilter);
+  
+  const container = document.getElementById('tickets-list');
+  
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:var(--text-muted)">Нет обращений</div>';
+    return;
+  }
+  
+  container.innerHTML = filtered.map(ticket => {
+    const status = statusMap[ticket.status] || statusMap.open;
+    const date = new Date(ticket.createdAt).toLocaleString('ru-RU');
+    return `
+      <div class="card" style="padding:20px;margin-bottom:12px;cursor:pointer" onclick="location.href='/admin/ticket.html?id=${ticket.id}'">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:8px">
+          <div style="font-weight:700">${escapeHtml(ticket.topic)}</div>
+          <span style="background:${status.color}22;border:1px solid ${status.color}55;color:${status.color};font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px">${status.text}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">
+          <i class="fa-regular fa-user"></i> ${escapeHtml(ticket.userNick)} (@${escapeHtml(ticket.userId)})
+        </div>
+        <div style="font-size:12px;color:var(--text-muted)">
+          <i class="fa-regular fa-calendar"></i> ${date}
+        </div>
+        <div style="font-size:13px;color:var(--text-sub);margin-top:8px">${escapeHtml(ticket.lastMessage || '')}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// Filters
+document.querySelectorAll('.adm-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.adm-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderTickets();
+  });
+});
+</script>
+<script src="/script.js"></script>
+</body>
+</html>
