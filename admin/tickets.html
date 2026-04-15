@@ -84,7 +84,7 @@ document.getElementById('admin-login').addEventListener('click', async () => {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Проверка...';
   
   try {
-    const res = await fetch('/api/admin/get-tickets', {
+    const res = await fetch('/api/get?action=admin-get-tickets', {
       headers: { 'x-admin-password': pwd }
     });
     
@@ -108,7 +108,7 @@ document.getElementById('admin-login').addEventListener('click', async () => {
 
 async function loadTickets() {
   try {
-    const res = await fetch('/api/admin/get-tickets', {
+    const res = await fetch('/api/get?action=admin-get-tickets', {
       headers: { 'x-admin-password': adminPassword }
     });
     const data = await res.json();

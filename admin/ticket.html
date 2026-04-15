@@ -62,7 +62,7 @@ document.getElementById('admin-login').addEventListener('click', async () => {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Проверка...';
   
   try {
-    const res = await fetch('/api/admin/get-tickets', {
+    const res = await fetch('/api/get?action=admin-get-tickets', {
       headers: { 'x-admin-password': pwd }
     });
     
@@ -96,7 +96,7 @@ async function loadTicket() {
   const container = document.getElementById('ticket-content');
   
   try {
-    const res = await fetch(`/api/get-ticket?id=${id}`, {
+    const res = await fetch(`/api/get?action=get-ticket&id=${id}`, {
       headers: { 'x-admin-password': adminPassword }
     });
     
@@ -201,10 +201,10 @@ async function sendReply(ticketId) {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправка...';
   
   try {
-    const res = await fetch('/api/admin/reply', {
+    const res = await fetch('/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-admin-password': adminPassword },
-      body: JSON.stringify({ ticketId, message })
+      body: JSON.stringify({ action: 'admin-reply', ticketId, message })
     });
     
     if (res.ok) {
