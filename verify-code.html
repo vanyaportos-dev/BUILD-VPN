@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Активация BUILD ID — BUILD VPN</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
 <body>
+
 <div class="blobs">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 </div>
+
 <main>
   <div class="container" style="max-width:540px;padding-top:60px;padding-bottom:100px">
 
@@ -30,13 +34,13 @@
     <div class="card" style="padding:32px" id="vc-form">
       <div class="bid-form-group">
         <label class="bid-label"><i class="fa-solid fa-hashtag"></i> BUILD ID Код</label>
-        <input type="text" id="vc-code" class="bid-input" style="text-align:center;font-size:22px;font-weight:800;letter-spacing:6px;text-transform:uppercase" placeholder="A3F9K2" maxlength="6" autocomplete="off" spellcheck="false">
+        <input type="text" id="vc-code" class="bid-input" style="text-align:center;font-size:22px;font-weight:800;letter-spacing:6px;text-transform:uppercase" placeholder="A3F9K2" maxlength="6" autocomplete="off">
         <p class="bid-hint">6 символов, без пробелов</p>
       </div>
 
       <div class="bid-form-group" style="margin-top:20px">
         <label class="bid-label"><i class="fa-solid fa-signature"></i> Никнейм</label>
-        <input type="text" id="vc-nick" class="bid-input" placeholder="Твоё имя в системе" maxlength="32" autocomplete="off" spellcheck="false">
+        <input type="text" id="vc-nick" class="bid-input" placeholder="Твоё имя в системе" maxlength="32" autocomplete="off">
         <p class="bid-hint">От 2 до 32 символов</p>
       </div>
 
@@ -57,6 +61,7 @@
   <button class="nav-item" id="nav-speed"><i class="fa-solid fa-gauge-high"></i><span>Speedtest</span></button>
   <a href="/blog" class="nav-item" id="nav-blog"><i class="fa-solid fa-pen-nib"></i><span>Блог</span></a>
 </nav>
+
 <div class="modal-backdrop" id="speed-modal">
   <div class="modal">
     <button class="modal-close" id="speed-close"><i class="fa-solid fa-xmark"></i></button>
@@ -100,9 +105,13 @@ document.getElementById('vc-submit').addEventListener('click', async () => {
       document.getElementById('vc-form').innerHTML = '<div style="text-align:center;padding:20px 0">' +
         '<i class="fa-solid fa-check-circle" style="font-size:56px;color:#4ADE80;display:block;margin-bottom:20px"></i>' +
         '<h2 style="font-size:22px;font-weight:800;margin-bottom:8px">BUILD ID активирован!</h2>' +
-        '<p style="color:var(--text-sub);margin-bottom:24px">Добро пожаловать, <strong style="color:var(--text-main)">' + data.nick + '</strong></p>' +
-        '<div class="bid-code-box" style="margin-bottom:24px">' + data.code + '</div>' +
-        '<a href="/dashboard.html?u=' + data.username + '" class="btn btn-primary" style="display:inline-flex;justify-content:center">' +
+        '<p style="color:var(--text-sub);margin-bottom:16px">Добро пожаловать, <strong style="color:var(--text-main)">' + data.nick + '</strong></p>' +
+        '<div class="bid-code-box" style="margin-bottom:16px">' + data.code + '</div>' +
+        '<div class="backup-box" style="margin-top:16px;padding:16px;background:rgba(74,222,128,0.08);border-radius:16px">' +
+        '<p style="margin:0 0 8px;font-size:14px;color:var(--text-main)"><i class="fa-solid fa-shield"></i> Сохраните резервный код:</p>' +
+        '<div style="font-size:24px;font-weight:800;letter-spacing:4px;color:#4ADE80">' + data.backupCode + '</div>' +
+        '<p style="margin:12px 0 0;font-size:12px;color:#EAB308">⚠️ Без него вы не сможете восстановить доступ!</p></div>' +
+        '<a href="/dashboard.html" class="btn btn-primary" style="display:inline-flex;justify-content:center;margin-top:24px">' +
         '<i class="fa-solid fa-user"></i> Перейти в личный кабинет</a></div>';
     } else {
       showMsg('error', data.error || 'Ошибка активации');
@@ -119,8 +128,7 @@ document.getElementById('vc-submit').addEventListener('click', async () => {
 function showMsg(type, text) {
   const el = document.getElementById('vc-result');
   el.style.display = 'block';
-  const isErr = type === 'error';
-  el.style.cssText = 'background:' + (isErr ? 'rgba(239,68,68,0.08)' : 'rgba(74,222,128,0.08)') + ';border:1px solid ' + (isErr ? 'rgba(239,68,68,0.3)' : 'rgba(74,222,128,0.3)') + ';border-radius:12px;padding:14px 18px;font-size:14px;color:var(--text-sub);';
+  el.style.cssText = 'background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:14px 18px;font-size:14px;color:var(--text-sub);';
   el.textContent = text;
 }
 </script>
