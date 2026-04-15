@@ -111,7 +111,7 @@ async function login() {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Проверяем...';
 
   try {
-    const r = await fetch('/api/get-requests', { headers: { 'x-admin-password': pwd } });
+    const r = await fetch('/api/get?action=get-requests', { headers: { 'x-admin-password': pwd } });
     if (r.ok) {
       admPwd = pwd;
       const data = await r.json();
@@ -136,7 +136,7 @@ document.getElementById('adm-refresh').addEventListener('click', async () => {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
   btn.disabled = true;
   try {
-    const r = await fetch('/api/get-requests', { headers: { 'x-admin-password': admPwd } });
+    const r = await fetch('/api/get?action=get-requests', { headers: { 'x-admin-password': admPwd } });
     if (r.ok) { const data = await r.json(); allRequests = data.requests || []; renderRequests(); }
   } catch {}
   btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Обновить';
