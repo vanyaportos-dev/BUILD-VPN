@@ -35,6 +35,19 @@ export default async function handler(req, res) {
     return res.status(200).json({ found: true, username: entry.username, nick: entry.nick, code: entry.code, createdAt: entry.createdAt, activatedAt: entry.activatedAt });
   }
 
+  // ========== ЗАЯВКИ BUILD ID (АДМИНКА) ==========
+  if (action === 'get-requests') {
+    const pwd = req.headers['x-admin-password'];
+    if (!pwd || pwd !== process.env.ADMIN_PASSWORD) return res.status(401).json({ error: 'Неверный пароль' });
+    const list = (await kv.get('bid:list')) || [];
+    const requests = [];
+    for (const username of list) {
+      const entry = await kv.get(`bid:${username}`);
+      if (entry) requests.push(entry);
+    }
+    return res.status(200).json({ requests });
+  }
+
   // ========== ТИКЕТЫ ==========
   if (action === 'get-my-tickets') {
     const token = req.cookies?.build_token;
@@ -79,4 +92,4 @@ export default async function handler(req, res) {
   }
 
   return res.status(400).json({ error: 'Неизвестное действие' });
-}
+          }
